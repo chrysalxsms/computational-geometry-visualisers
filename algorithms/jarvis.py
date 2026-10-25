@@ -70,15 +70,15 @@ def jarvis_steps(P):
             o = cross(p, q, r)
             new_q = q
             if o < 0:       # r is right of p->q
-                text = f"cross = {o} < 0: {r} is RIGHT of current → candidate, so it becomes the new candidate."
+                text = f"cross = {o} < 0: {r} is RIGHT of current -> candidate, so it becomes the new candidate."
                 new_q = r       # r is a better candidate
             elif o == 0 and dist(p, r) > dist(p, q):
-                text = f"cross = {o} == 0: {r} is collinear and farther than current → candidate, so it becomes the new candidate."
+                text = f"cross = {o} == 0: {r} is collinear and farther than current -> candidate, so it becomes the new candidate."
                 new_q = r       # collinear: take the farthest point
             elif o > 0:
-                text = f"cross = {o} > 0: {r} is LEFT of current → candidate, so it is ignored."
+                text = f"cross = {o} > 0: {r} is LEFT of current -> candidate, so it is ignored."
             else:
-                text = f"cross = {o} == 0: {r} is collinear but not farther than current → candidate, so it is ignored."
+                text = f"cross = {o} == 0: {r} is collinear but not farther than current -> candidate, so it is ignored."
             steps.append({
                 "title": f"Testing {r}",
                 "hull": hull.copy(),
@@ -87,11 +87,33 @@ def jarvis_steps(P):
                 "text": text
             })
             q = new_q
-        
+
+        # 4. conclusion of the scan: q survived every test
+        if q == p0:
+            text = f"No point is right of {p} -> {q}, and {q} is the start point, so the hull is closed."
+        else:
+            text = f"No point is right of {p} -> {q}, so {q} is the next hull point."
+        steps.append({
+            "title": f"Next hull point: {q}",
+            "hull": hull.copy(),
+            "points": {"current": p, "candidate": q},
+            "lines": [(p, q, "candidate")],
+            "text": text
+        })
+
         p = q
 
         if p == p0:
             break
+
+    # 5. done: only the finished hull, closed by repeating the start point
+    steps.append({
+        "title": "Done",
+        "hull": hull + [hull[0]],
+        "points": {},
+        "lines": [],
+        "text": f"Convex hull complete: {len(hull)} points, found counterclockwise from {hull[0]}."
+    })
 
     return steps
 
@@ -118,12 +140,17 @@ if __name__ == "__main__":
             for r in points:
                 assert cross(a, b, r) >= 0, f"{r} is right of {a} -> {b}, hull = {hull}"
 
-        # the steps must end with the same hull as jarvis_march
+        # the steps must end with the same hull as jarvis_march, closed
         steps = jarvis_steps(points)
-        assert steps[-1]["hull"] == hull, f"steps end with {steps[-1]['hull']}, expected {hull}"
+        assert steps[-1]["hull"] == hull + [hull[0]], f"steps end with {steps[-1]['hull']}, expected {hull}"
+        # the done step shows only the hull: no candidates or tested points left
+        assert steps[-1]["points"] == {} and steps[-1]["lines"] == [], "done step still has roles"
         # snapshot check: the first step only knows the start point
         assert steps[0]["hull"] == [hull[0]], f"first step hull is {steps[0]['hull']}"
+        # one "next hull point" step per hull point
+        assert sum(s["title"].startswith("Next hull point") for s in steps) == len(hull)
         # skip check: no step tests the current point or the candidate itself
         for step in steps:
             roles = step["points"]
-            assert roles["testing"] not in (roles["current"], roles["candidate"]), step["title"]
+            if "testing" in roles:
+                assert roles["testing"] not in (roles["current"], roles["candidate"]), step["title"]
