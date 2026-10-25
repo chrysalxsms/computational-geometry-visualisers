@@ -44,12 +44,65 @@ def jarvis_march(P):
 
     return hull
 
+def jarvis_steps(P):
+    n = len(P)
+    if n < 3:
+        return []
+
+    # 1. start point: smallest x, smallest y on a tie
+    p0 = min(P, key=lambda p: (p[0], p[1]))
+    hull = []
+    steps = []
+    p = p0
+
+    while True:
+        hull.append(p)
+
+        # 2. candidate for the next point: any point != p
+        q = P[0]
+        if q == p:
+            q = P[1]
+
+        # 3. find the "rightmost" point as seen from p
+        for r in P:
+            if r == p or r == q:
+                continue    # comparing with itself is always collinear: no step needed
+            o = cross(p, q, r)
+            new_q = q
+            if o < 0:       # r is right of p->q
+                text = f"cross = {o} < 0: {r} is RIGHT of current → candidate, so it becomes the new candidate."
+                new_q = r       # r is a better candidate
+            elif o == 0 and dist(p, r) > dist(p, q):
+                text = f"cross = {o} == 0: {r} is collinear and farther than current → candidate, so it becomes the new candidate."
+                new_q = r       # collinear: take the farthest point
+            elif o > 0:
+                text = f"cross = {o} > 0: {r} is LEFT of current → candidate, so it is ignored."
+            else:
+                text = f"cross = {o} == 0: {r} is collinear but not farther than current → candidate, so it is ignored."
+            steps.append({
+                "title": f"Testing {r}",
+                "hull": hull.copy(),
+                "points": {"current": p, "candidate": q, "testing": r},
+                "lines": [(p, q, "candidate"), (p, r, "testing")],
+                "text": text
+            })
+            q = new_q
+        
+        p = q
+
+        if p == p0:
+            break
+
+    return steps
+
 
 if __name__ == "__main__":
     # square with a point inside
     points = [(0, 0), (4, 0), (4, 4), (0, 4), (2, 2)]
     hull = jarvis_march(points)
     assert hull == [(0, 0), (4, 0), (4, 4), (0, 4)]
+    for step in jarvis_steps([(0, 0), (4, 0), (4, 4), (0, 4), (2, 2)])[:6]:
+        print(step["title"], "|", step["text"])
 
     # points on an edge
     points = [(0, 0), (4, 0), (4, 4), (0, 4), (2, 0)]
@@ -64,3 +117,13 @@ if __name__ == "__main__":
             b = hull[(i + 1) % len(hull)]
             for r in points:
                 assert cross(a, b, r) >= 0, f"{r} is right of {a} -> {b}, hull = {hull}"
+
+        # the steps must end with the same hull as jarvis_march
+        steps = jarvis_steps(points)
+        assert steps[-1]["hull"] == hull, f"steps end with {steps[-1]['hull']}, expected {hull}"
+        # snapshot check: the first step only knows the start point
+        assert steps[0]["hull"] == [hull[0]], f"first step hull is {steps[0]['hull']}"
+        # skip check: no step tests the current point or the candidate itself
+        for step in steps:
+            roles = step["points"]
+            assert roles["testing"] not in (roles["current"], roles["candidate"]), step["title"]

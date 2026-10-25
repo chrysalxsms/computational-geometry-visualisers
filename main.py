@@ -1,6 +1,8 @@
 import math
-
+import random
 import pygame
+from shared.points import random_points
+
 
 color_red = (255, 0, 0)  # Red color
 color_black = (0, 0, 0)  # Black color
@@ -24,7 +26,7 @@ def conversion(p):
 def draw_line(a, b):
     pygame.draw.line(screen, color_black, conversion(a), conversion(b), 2)
 
-points = [(0, 0), (1, 1), (2, 0)]
+points = random_points(random.randint(5, 15), -7, 7)  # Generate random points
 
 while running:
     for event in pygame.event.get():
@@ -32,6 +34,8 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
             points = []
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+            points = random_points(random.randint(5, 15), -7, 7)  # Generate random points
     screen.fill(color_white)
 
     # screen edges in maths coordinates (inverse of conversion)
