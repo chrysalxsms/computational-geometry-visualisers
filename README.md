@@ -64,7 +64,7 @@ The Jarvis tests check the hull on fixed cases and on 100 random point sets, and
 ## Roadmap
 
 - [x] Jarvis march with step-through
-- [ ] Graham scan
+- [x] Graham scan
 - [ ] Chan's algorithm
 - [ ] Algorithm selection
 - [ ] Autoplay with adjustable speed
