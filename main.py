@@ -12,9 +12,13 @@ color_grey = (200, 200, 200)  # Grey color
 radius = 5  # Radius of the circle
 
 ROLE_COLOURS = {
-    "current": (0, 255, 0),   # Green
-    "candidate": (0, 0, 255), # Blue
-    "testing": (255, 165, 0)  # Orange
+    "start": (255, 20, 147),  # pink
+    "prev": (128, 0, 128),    # purple
+    "current": (0, 255, 0),   # green
+    "candidate": (0, 0, 255), # blue
+    "testing": (255, 165, 0), # orange
+    "top": (0, 255, 255),     # cyan
+    "popped": (0, 0, 0)       # black
 }
 
 pygame.init()
@@ -65,6 +69,11 @@ while running:
                 index -= 1
         if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
             points, steps, index = load_points(random_points(random.randint(5, 15), -7, 7))
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_g:
+            algorithm_names = list(ALGORITHMS)
+            current_index = algorithm_names.index(algorithm_name)
+            algorithm_name = algorithm_names[(current_index + 1) % len(algorithm_names)]
+            points, steps, index = load_points(points)
     screen.fill(color_white)
 
     # screen edges in maths coordinates (inverse of conversion)
@@ -93,6 +102,12 @@ while running:
 
     if steps:   # nothing to draw after C
         step = steps[index]
+
+        # Draw the traversal path before the hull and role lines.
+        path = step.get("path", [])
+        for i in range(len(path) - 1):
+            draw_line(path[i], path[i + 1], (120, 120, 120))
+        
         # a) the hull so far: neighbouring points joined, no wrap-around (not closed yet)
         for i in range(len(step["hull"]) - 1):
             draw_line(step["hull"][i], step["hull"][i + 1], color_black)
@@ -111,6 +126,13 @@ while running:
             f"Step {index + 1} / {len(steps)}:  {step['title']}",
             step["text"],
         ])
+
+        # Draw labels last so they remain visible over the points and paths.
+        for point, label in step.get("labels", {}).items():
+            label_surface = font.render(str(label), True, color_black)
+            point_x, point_y = conversion(point)
+            screen.blit(label_surface, (point_x + radius + 3, point_y - label_surface.get_height() - 3))
+        
     else:
         draw_text_panel([algorithm_name, "No points: press R for a random set."])
 
