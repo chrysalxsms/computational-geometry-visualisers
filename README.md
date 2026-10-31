@@ -1,5 +1,5 @@
 # Computational Geometry Visualisers
-![Thumbnail](docs/CM_vis_thumbnail.png)
+![Thumbnail](CM_vis_thumbnail.png)
 
 Step-by-step visualisations of computational geometry algorithms that run in the browser.
 Each step shows what the algorithm is testing, what it decides, and why, so you can follow it one comparison at a time.
