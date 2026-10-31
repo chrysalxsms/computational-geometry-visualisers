@@ -5,11 +5,20 @@ import {
   hullFrames,
   initialBuildings,
   initialPoints,
+  messageFrames,
   presetNote,
   presetsFor,
-  skylineFrames,
   snippets,
 } from "./geometry.js";
+
+const LOADING_FRAMES = messageFrames(
+  "Loading Python…",
+  "Starting Python in your browser. The first time this takes a few seconds.",
+);
+const SKYLINE_FRAMES = messageFrames(
+  "Not available yet",
+  "The Manhattan skyline has no Python steps yet, so there is nothing to show.",
+);
 import AlgorithmLibrary, {
   algorithmFromHash,
   slugFor,
@@ -118,11 +127,32 @@ export default function App() {
   const [editing, setEditing] = useState(false);
   const [modal, setModal] = useState(null);
   const isSkyline = algorithm === "Manhattan Skyline";
-  const frames = useMemo(
-    () =>
-      isSkyline ? skylineFrames(buildings) : hullFrames(points, algorithm),
-    [points, buildings, algorithm, isSkyline],
+  // Frames come from Python, which answers later (asynchronously). Each answer is stored
+  // with the input it belongs to, so frames for old points are never shown for new ones.
+  const inputKey = useMemo(
+    () => JSON.stringify([algorithm, points]),
+    [algorithm, points],
   );
+  const [python, setPython] = useState({ key: null, frames: null });
+  useEffect(() => {
+    if (isSkyline) return;
+    let cancelled = false;   // set when the input changes before Python answers
+    hullFrames(points, algorithm)
+      .then((result) => !cancelled && setPython({ key: inputKey, frames: result }))
+      .catch((error) =>
+        !cancelled &&
+        setPython({ key: inputKey, frames: messageFrames("Python error", String(error)) }),
+      );
+    return () => {
+      cancelled = true;
+    };
+  }, [inputKey, isSkyline, points, algorithm]);
+  const frames = isSkyline
+    ? SKYLINE_FRAMES
+    : python.key === inputKey
+      ? python.frames
+      : LOADING_FRAMES;
+  const progress = frames.length > 1 ? step / (frames.length - 1) : 0;
   const frame = frames[Math.min(step, frames.length - 1)];
   const completed = step === frames.length - 1;
   const count = isSkyline ? buildings.length : points.length;
@@ -980,7 +1010,7 @@ export default function App() {
                         </span>
                       </span>
                       <span>
-                        {Math.round((step / (frames.length - 1)) * 100)}%
+                        {Math.round(progress * 100)}%
                       </span>
                     </div>
                     <input
@@ -994,7 +1024,7 @@ export default function App() {
                         setStep(Number(e.target.value));
                       }}
                       style={{
-                        "--progress": `${(step / (frames.length - 1)) * 100}%`,
+                        "--progress": `${progress * 100}%`,
                       }}
                     />
                   </div>

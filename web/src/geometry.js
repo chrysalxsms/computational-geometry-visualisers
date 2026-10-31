@@ -1,3 +1,5 @@
+import { getSteps } from "./python.js";
+
 export const algorithms = ["Jarvis March", "Graham Scan", "Manhattan Skyline"];
 export const presetsFor = (a) =>
   a === "Manhattan Skyline"
@@ -106,6 +108,7 @@ export const initialPoints = [
   [45, 53],
   [58, 18],
 ].map(([x, y], i) => ({ id: `P${i}`, x, y }));
+
 export function createBuildings(preset, n) {
   return Array.from({ length: n }, (_, i) => {
     let left = 5 + Math.random() * 72,
@@ -138,6 +141,7 @@ export function createBuildings(preset, n) {
     };
   });
 }
+
 export const initialBuildings = [
   { id: "B0", left: 8, right: 30, height: 38 },
   { id: "B1", left: 19, right: 42, height: 66 },
@@ -146,274 +150,81 @@ export const initialBuildings = [
   { id: "B4", left: 60, right: 79, height: 57 },
   { id: "B5", left: 75, right: 91, height: 32 },
 ];
-const cross = (a, b, c) =>
-  (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
-const distance = (a, b) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
-export function hullFrames(points, algorithm) {
-  const frames = [];
-  let checks = 0;
-  const save = (hull, title, detail, phase, line, current, candidate, test) =>
-    frames.push({
-      hull: hull.map((p) => p.id),
-      title,
-      detail,
-      phase,
-      line,
-      checks,
-      current: current?.id,
-      candidate: candidate?.id,
-      test: test?.id,
-      skyline: [],
-      activeBuildings: [],
-    });
-  if (algorithm === "Jarvis March") {
-    const start = points.reduce((a, p) =>
-      p.x < a.x || (p.x === a.x && p.y < a.y) ? p : a,
-    );
-    const hull = [start];
-    let current = start;
-    save(
-      hull,
-      "Start at the leftmost point",
-      `${start.id} has the smallest x-coordinate (${start.x}). It must be on the convex hull, so it becomes our starting vertex.`,
-      "Initialize",
-      0,
-      start,
-    );
-    do {
-      let candidate = points.find((p) => p.id !== current.id);
-      save(
-        hull,
-        "Choose an initial candidate",
-        `From ${current.id}, start with ${candidate.id} as the candidate for the next hull vertex. Now check every other point against this direction.`,
-        "Find next vertex",
-        3,
-        current,
-        candidate,
-      );
-      for (const test of points) {
-        if (test.id === current.id || test.id === candidate.id) continue;
-        const turn = cross(current, candidate, test);
-        checks++;
-        save(
-          hull,
-          "Test the next point",
-          `Check the orientation of ${current.id} → ${candidate.id} → ${test.id}. ${
-            Math.abs(turn) < 1e-8
-              ? "These points are collinear; compare their distances from the current vertex."
-              : turn < 0
-                ? `${test.id} is clockwise from the candidate, so it becomes the new candidate.`
-                : `${test.id} is counterclockwise from the candidate. Keep ${candidate.id} and continue scanning.`
-          }`,
-          "Orientation test",
-          5,
-          current,
-          candidate,
-          test,
-        );
-        if (
-          turn < 0 ||
-          (Math.abs(turn) < 1e-8 &&
-            distance(current, test) > distance(current, candidate))
-        ) {
-          candidate = test;
-          save(
-            hull,
-            "Update the candidate",
-            `${candidate.id} is the new outermost candidate from ${current.id}. The dashed segment shows the direction we are now testing.`,
-            "Update candidate",
-            6,
-            current,
-            candidate,
-          );
-        }
-      }
-      hull.push(candidate);
-      save(
-        hull,
-        candidate.id === start.id
-          ? "The hull is complete"
-          : "Confirm a hull edge",
-        candidate.id === start.id
-          ? `We have returned to ${start.id}. The closed boundary contains ${hull.length - 1} hull vertices and encloses every input point.`
-          : `No point lies clockwise of ${current.id} → ${candidate.id}. Confirm this edge and continue wrapping from ${candidate.id}.`,
-        candidate.id === start.id ? "Complete" : "Commit edge",
-        7,
-        candidate,
-      );
-      current = candidate;
-    } while (current.id !== start.id && hull.length <= points.length);
-  } else {
-    const pivot = points.reduce((a, p) =>
-      p.y < a.y || (p.y === a.y && p.x < a.x) ? p : a,
-    );
-    const ordered = points
-      .filter((p) => p.id !== pivot.id)
-      .sort(
-        (a, b) =>
-          Math.atan2(a.y - pivot.y, a.x - pivot.x) -
-            Math.atan2(b.y - pivot.y, b.x - pivot.x) ||
-          distance(pivot, a) - distance(pivot, b),
-      );
-    const stack = [pivot];
-    save(
-      stack,
-      "Find the lowest point",
-      `${pivot.id} is the lowest point (y = ${pivot.y}). Use it as the pivot and sort all other points by polar angle, breaking ties by distance.`,
-      "Initialize",
-      0,
-      pivot,
-    );
-    save(
-      stack,
-      "Sort by polar angle",
-      `The angular order begins ${ordered
-        .slice(0, 5)
-        .map((p) => p.id)
-        .join(", ")}. Scan this sequence and keep only left turns.`,
-      "Sort points",
-      1,
-      pivot,
-      ordered[0],
-    );
-    for (const p of ordered) {
-      while (stack.length >= 2) {
-        const a = stack[stack.length - 2],
-          b = stack[stack.length - 1],
-          turn = cross(a, b, p);
-        checks++;
-        save(
-          stack,
-          "Check the turn",
-          `Test ${a.id} → ${b.id} → ${p.id}. ${
-            turn > 0
-              ? "This is a left turn, so the current boundary remains convex."
-              : `This ${
-                  turn === 0 ? "collinear segment" : "right turn"
-                } cannot be part of the outer boundary. Remove ${b.id} from the stack.`
-          }`,
-          "Orientation test",
-          4,
-          a,
-          b,
-          p,
-        );
-        if (turn > 0) break;
-        stack.pop();
-        save(
-          stack,
-          "Remove the middle point",
-          `${b.id} is removed from the hull stack. Check ${p.id} against the previous edge before adding it.`,
-          "Pop stack",
-          5,
-          stack[stack.length - 1],
-          p,
-        );
-      }
-      stack.push(p);
-      save(
-        stack,
-        "Add a hull candidate",
-        `Push ${p.id} onto the stack. There are now ${stack.length} candidate hull vertices. Later points may still remove this vertex.`,
-        "Push to stack",
-        6,
-        p,
-      );
-    }
-    stack.push(pivot);
-    save(
-      stack,
-      "The hull is complete",
-      `Connect the final vertex back to ${pivot.id}. The stack contains ${stack.length - 1} hull vertices in counterclockwise order.`,
-      "Complete",
-      7,
-      pivot,
-    );
-  }
-  return frames;
-}
-export function skylineFrames(buildings) {
-  const frames = [],
-    skyline = [];
-  const events = [...new Set(buildings.flatMap((b) => [b.left, b.right]))].sort(
-    (a, b) => a - b,
-  );
-  const active = new Map();
-  let checks = 0,
-    lastHeight = 0;
-  const save = (sweep, title, detail, phase, line) =>
-    frames.push({
+// ---------------------------------------------------------------------------
+// Frames come from the Python algorithms (web/public/python), run by Pyodide.
+// This file only translates Python steps into the frames the UI draws.
+// ---------------------------------------------------------------------------
+
+// UI name -> name in the Python registry (algorithms/registry.py)
+const PYTHON_NAMES = {
+  "Jarvis March": "Jarvis march",
+  "Graham Scan": "Graham scan",
+};
+
+// A frame with every field the UI reads, showing just a message.
+// Used while Python loads, for errors, and for algorithms without Python steps yet.
+export function messageFrames(title, detail) {
+  return [
+    {
       hull: [],
       title,
       detail,
-      phase,
-      line,
-      checks,
-      sweep,
-      skyline: skyline.map((p) => [...p]),
-      activeBuildings: [...active.keys()],
-    });
-  save(
-    undefined,
-    "Prepare the sweep events",
-    `Sort the ${events.length} distinct building-edge positions from left to right. At each position, process all starts and ends together.`,
-    "Initialize",
-    0,
-  );
-  for (const x of events) {
-    const entering = buildings.filter((b) => b.left === x),
-      leaving = buildings.filter((b) => b.right === x);
-    for (const b of leaving) active.delete(b.id);
-    for (const b of entering) active.set(b.id, b);
-    checks += entering.length + leaving.length;
-    save(
-      x,
-      "Move to the next event",
-      `Sweep to x = ${x}. ${
-        entering.length
-          ? `${entering.map((b) => b.id).join(", ")} enter the active set. `
-          : ""
-      }${
-        leaving.length
-          ? `${leaving.map((b) => b.id).join(", ")} leave the active set. `
-          : ""
-      }${active.size} building${
-        active.size === 1 ? " is" : "s are"
-      } now active.`,
-      "Process event",
-      3,
-    );
-    const height = Math.max(0, ...[...active.values()].map((b) => b.height));
-    if (height !== lastHeight) {
-      skyline.push([x, lastHeight], [x, height]);
-      save(
-        x,
-        "Record a skyline change",
-        `The maximum active height changes from ${lastHeight} to ${height}. Add a key point at (${x}, ${height}) and extend the skyline to this position.`,
-        "Update skyline",
-        6,
-      );
-      lastHeight = height;
-    } else {
-      skyline.push([x, height]);
-      save(
-        x,
-        "The height stays the same",
-        `The tallest active building still has height ${height}. This edge is hidden by the existing skyline, so no new key point is needed.`,
-        "Continue sweep",
-        4,
-      );
-    }
-  }
-  save(
-    events[events.length - 1],
-    "The skyline is complete",
-    "All building edges have been processed. The active set is empty, and the skyline returns to ground level.",
-    "Complete",
-    7,
-  );
-  return frames;
+      phase: "",
+      line: -1,
+      checks: 0,
+      current: undefined,
+      candidate: undefined,
+      test: undefined,
+      sweep: undefined,
+      skyline: [],
+      activeBuildings: [],
+    },
+  ];
 }
+
+function stepToFrame(step, idOf, checks) {
+  const frame = messageFrames(step.title, step.text)[0];
+  frame.checks = checks;
+  frame.hull = (step.hull.length > 0 ? step.hull : (step.path ?? [])).map(idOf);
+  const currentPoint =
+    step.points.current ??
+    step.points.top ??
+    step.points.popped ??
+    step.points.start;
+  frame.current = currentPoint && idOf(currentPoint);
+  const candidatePoint = step.points.candidate ?? step.points.prev;
+  frame.candidate = candidatePoint && idOf(candidatePoint);
+  frame.test = step.points.testing && idOf(step.points.testing);
+  frame.phase =
+    step.title.startsWith("Testing") || step.title.startsWith("Check turn")
+      ? "Orientation test"
+      : step.title.startsWith("Popped")
+        ? "Pop stack"
+        : step.title.startsWith("Next hull point")
+          ? "Commit edge"
+          : step.title.startsWith("Done")
+            ? "Complete"
+            : "Setup";
+  return frame;
+}
+
+// points: the UI's points [{ id, x, y }, ...]. Returns a Promise of frames.
+export async function hullFrames(points, algorithm) {
+  const ids = new Map(points.map((p) => [`${p.x},${p.y}`, p.id]));
+  const idOf = (point) => ids.get(`${point[0]},${point[1]}`);
+
+  const steps = await getSteps(
+    PYTHON_NAMES[algorithm],
+    points.map((p) => [p.x, p.y]),
+  );
+
+  let checks = 0;
+  return steps.map((step) => {
+    if (step.points.testing) checks += 1; // every step that tests a point is one orientation test
+    return stepToFrame(step, idOf, checks);
+  });
+}
+
 export const snippets = {
   "Jarvis March": [
     "start = current = leftmost(points)",
