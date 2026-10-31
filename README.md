@@ -66,7 +66,7 @@ The Jarvis tests check the hull on fixed cases and on 100 random point sets, and
 - [x] Jarvis march with step-through
 - [x] Graham scan
 - [ ] Chan's algorithm
-- [ ] Algorithm selection
+- [x] Algorithm selection
 - [ ] Autoplay with adjustable speed
 - [ ] Visualise the Manhattan skyline sweep
 
