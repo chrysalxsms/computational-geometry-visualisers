@@ -36,25 +36,6 @@ The Manhattan skyline appears in the library, but its visualisation isn't availa
 | `Esc`           | Close a dialog, stop adding points |
 | `⌘K` / `Ctrl+K` | Search the algorithm library       |
 
-## Getting started
-
-You need [Node.js](https://nodejs.org) (a recent LTS version).
-
-```bash
-git clone https://github.com/chrysalxsms/computational-geometry-visualisers.git
-cd computational-geometry-visualisers/web
-npm install
-npm run dev
-```
-
-Open the link it prints (usually `http://localhost:5173`). The first time you open an algorithm it shows "Loading Python…" for a few seconds while Pyodide downloads, so an internet connection is needed.
-
-Other commands, all run in `web/`:
-
-```bash
-npm run build     # build the site into web/dist
-npm run lint      # check the JavaScript with ESLint
-```
 
 ## How it works
 
