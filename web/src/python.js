@@ -35,7 +35,9 @@ function startPython() {
       pyodide.FS.mkdirTree("algorithms");
       pyodide.FS.mkdirTree("shared");
       for (const file of PYTHON_FILES) {
-        const text = await (await fetch(`/python/${file}`)).text();
+        const text = await (
+          await fetch(`${import.meta.env.BASE_URL}python/${file}`)
+        ).text();
         pyodide.FS.writeFile(file, text);
       }
       pyodide.runPython(BRIDGE);
