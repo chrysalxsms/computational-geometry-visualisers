@@ -8,7 +8,7 @@ Each step shows what the algorithm is testing, what it decides, and why, so you 
 
 The algorithms are written in **Python** and run in the browser through [Pyodide](https://pyodide.org). The interface is a **React** app (Vite + Tailwind CSS) that draws whatever steps the Python code produces.
 
-## Features
+## Current Features
 
 - **Jarvis march (gift wrapping)**, O(nh)
   - every orientation test is its own step, with the cross product value and the decision it leads to
@@ -16,13 +16,13 @@ The algorithms are written in **Python** and run in the browser through [Pyodide
 - **Graham scan**, O(n log n)
   - steps for choosing the start point, sorting by angle, every turn check and every stack pop
   - the stack is drawn as it grows and shrinks; popped points are explained (clockwise turn or collinear)
-- **Algorithm library** to choose an algorithm, with a short description and its running time
+- **Algorithm library** to choose an algorithm, with a short description and its time complexity
 - **Playback**: play/pause, adjustable speed, step forward and back, or drag the timeline
 - **Inputs**: random points, best-case and worst-case presets, collinear and clustered sets, a point-count slider (5 to 35), or click to add your own points
 - **Explanation panel** with the current step, its phase, the highlighted points, and how many orientation tests have been done so far
 - **About the algorithm** tab with a description and pseudocode
 
-The Manhattan skyline appears in the library, but its visualisation isn't available yet: the Python code computes the skyline area but doesn't produce steps.
+The Manhattan skyline appears in the library, but its visualisation isn't available yet: the Python code computes the skyline area but doesn't produce steps. (roadmap)
 
 ## Controls
 
@@ -105,3 +105,7 @@ python3 -m algorithms.manhattan_skyline
 - [ ] Chan's algorithm
 - [ ] Visualise the Manhattan skyline sweep
 - [x] Publish the site on GitHub Pages
+- [ ] Bentley-Ottmann algorithm for determining the intersection of line segments
+- [ ] Smallest enclosing disk
+- [ ] kd-trees
+- [ ] Voronoi Diagrams
