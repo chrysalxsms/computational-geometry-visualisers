@@ -1,0 +1,7 @@
+ui/**        linguist-generated
+export/**        linguist-vendored
+build/**         linguist-vendored
+*.package-lock.json         linguist-vendored
+*.package.json         linguist-vendored
+*.vite.config.js         linguist-vendored
+*.eslint.config.js        linguist-vendored
