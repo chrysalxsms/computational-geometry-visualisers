@@ -2591,8 +2591,11 @@ h1,
   border-top: 1px solid #ede8f1;
 }
 .card-complexity {
-  color: var(--ink-secondary);
-  background: #f7f5f9;
+  color: var(--accent-hover);
+  background: #ffffffa8;
+  position: absolute;
+  top: 22px;
+  right: 22px;
   padding: 4px 6px;
   border-radius: 4px;
   font-family: "IBM Plex Mono", monospace;

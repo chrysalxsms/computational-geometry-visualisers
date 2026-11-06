@@ -321,6 +321,7 @@ export default function AlgorithmLibrary({ onSelect }) {
                     {entry.family}
                   </span>
                   <AlgorithmDrawing algorithm={entry.name} />
+                  <span className="card-complexity">{entry.complexity}</span>
                 </span>
                 <span className="card-content">
                   <span className="card-title">
@@ -330,9 +331,6 @@ export default function AlgorithmLibrary({ onSelect }) {
                     </span>
                   </span>
                   <span className="card-description">{entry.description}</span>
-                  <span className="card-bottom">
-                    <span className="card-complexity">{entry.complexity}</span>
-                  </span>
                 </span>
               </button>
             </article>
