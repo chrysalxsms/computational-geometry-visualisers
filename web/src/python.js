@@ -3,6 +3,7 @@ const PYTHON_FILES = [
   "algorithms/__init__.py",
   "algorithms/jarvis.py",
   "algorithms/graham.py",
+  "algorithms/manhattan_skyline.py",
   "algorithms/registry.py",
   "shared/geometry.py",
   "shared/points.py",

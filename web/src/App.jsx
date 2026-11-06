@@ -8,6 +8,7 @@ import {
   messageFrames,
   presetNote,
   presetsFor,
+  skylineFrames,
   snippets,
 } from "./geometry.js";
 
@@ -15,10 +16,7 @@ const LOADING_FRAMES = messageFrames(
   "Loading Python…",
   "Starting Python in your browser. The first time this takes a few seconds.",
 );
-const SKYLINE_FRAMES = messageFrames(
-  "Not available yet",
-  "The Manhattan skyline has no Python steps yet, so there is nothing to show.",
-);
+
 import AlgorithmLibrary, {
   algorithmFromHash,
   slugFor,
@@ -127,31 +125,34 @@ export default function App() {
   const [editing, setEditing] = useState(false);
   const [modal, setModal] = useState(null);
   const isSkyline = algorithm === "Manhattan Skyline";
+
   // Frames come from Python, which answers later (asynchronously). Each answer is stored
   // with the input it belongs to, so frames for old points are never shown for new ones.
   const inputKey = useMemo(
-    () => JSON.stringify([algorithm, points]),
-    [algorithm, points],
+    () => JSON.stringify([algorithm, points, buildings]),
+    [algorithm, points, buildings],
   );
+
   const [python, setPython] = useState({ key: null, frames: null });
   useEffect(() => {
-    if (isSkyline) return;
-    let cancelled = false;   // set when the input changes before Python answers
-    hullFrames(points, algorithm)
-      .then((result) => !cancelled && setPython({ key: inputKey, frames: result }))
-      .catch((error) =>
-        !cancelled &&
-        setPython({ key: inputKey, frames: messageFrames("Python error", String(error)) }),
+    let cancelled = false; // set when the input changes before Python answers
+    (isSkyline ? skylineFrames(buildings) : hullFrames(points, algorithm))
+      .then(
+        (result) => !cancelled && setPython({ key: inputKey, frames: result }),
+      )
+      .catch(
+        (error) =>
+          !cancelled &&
+          setPython({
+            key: inputKey,
+            frames: messageFrames("Python error", String(error)),
+          }),
       );
     return () => {
       cancelled = true;
     };
-  }, [inputKey, isSkyline, points, algorithm]);
-  const frames = isSkyline
-    ? SKYLINE_FRAMES
-    : python.key === inputKey
-      ? python.frames
-      : LOADING_FRAMES;
+  }, [inputKey, isSkyline, points, algorithm, buildings]);
+  const frames = python.key === inputKey ? python.frames : LOADING_FRAMES;
   const progress = frames.length > 1 ? step / (frames.length - 1) : 0;
   const frame = frames[Math.min(step, frames.length - 1)];
   const completed = step === frames.length - 1;
@@ -202,7 +203,9 @@ export default function App() {
   }, []);
   useEffect(() => {
     document.title =
-      screen === "library" ? "ALGO — Algorithm library" : `${algorithm} — ALGO`;
+      screen === "library"
+        ? "ALGEOMETRY — Algorithm library"
+        : `${algorithm} — ALGO`;
     document.querySelector("h1")?.focus({ preventScroll: true });
   }, [screen, algorithm]);
   const loadPreset = (p, n = count) => {
@@ -341,17 +344,14 @@ export default function App() {
       }`}
     >
       {screen === "library" ? (
-        <AlgorithmLibrary
-          onSelect={selectAlgorithm}
-          onGuide={() => setModal("guide")}
-        />
+        <AlgorithmLibrary onSelect={selectAlgorithm} />
       ) : (
         <main className="workspace-main">
           <header className="topbar">
             <div className="workspace-navigation">
               <Brand
                 onClick={returnToLibrary}
-                label={algorithm === "Jarvis March" ? "title" : "ALGO"}
+                label={algorithm === "Jarvis March" ? "title" : "ALGEOMETRY"}
               />
               <span className="identity-divider" />
               <button className="back-to-library" onClick={returnToLibrary}>
@@ -374,13 +374,6 @@ export default function App() {
           <div className="main-content">
             <section className="page-heading">
               <h1 tabIndex={-1}>{algorithm}</h1>
-              <button
-                className="secondary-button"
-                onClick={() => setModal("guide")}
-              >
-                <Icon name="book" size={15} />
-                How it works
-              </button>
             </section>
             <div className="workspace-tabs">
               <div>
@@ -406,17 +399,17 @@ export default function App() {
                 </span>
                 <h2>
                   {algorithm === "Jarvis March"
-                    ? "Wrap the outer boundary."
+                    ? "Jarvis March"
                     : algorithm === "Graham Scan"
-                      ? "Keep the turns that matter."
-                      : "Follow the changing horizon."}
+                      ? "Graham Scan"
+                      : "Manhattan Skyline"}
                 </h2>
                 <p>
                   {algorithm === "Jarvis March"
                     ? "Jarvis March, also called gift wrapping, starts at the leftmost point and repeatedly scans every other point to find the next outermost vertex. Collinear ties are resolved by choosing the farthest point. It finishes when it returns to the starting vertex."
                     : algorithm === "Graham Scan"
                       ? "Graham Scan chooses the lowest point as a pivot, sorts the remaining points by polar angle, and processes them with a stack. A non-left turn removes the middle vertex. The result is a counterclockwise convex boundary; collinear interior points are discarded."
-                      : "The Manhattan skyline algorithm sweeps through sorted building-edge events. At each x-coordinate it updates an active set of buildings and finds the maximum height. A change in maximum height creates a skyline key point. Events at the same x-coordinate are processed together."}
+                      : "The Manhattan skyline algorithm sweeps through sorted building-edge events. A max-heap holds the buildings it has passed the start of, with the tallest on top; buildings that have ended are only removed once they reach the top (lazy deletion). When the height on top of the heap changes, the skyline gets two corners: the old height and the new height at the same x. Events at the same x-coordinate are processed one by one: starts before ends, tallest start first."}
                 </p>
                 <h3>Experiment with the input</h3>
                 <p>
@@ -622,6 +615,7 @@ export default function App() {
                         <text x="42" y="32" className="axis-name">
                           y
                         </text>
+
                         {isSkyline ? (
                           <>
                             {buildings.map((b, i) => (
@@ -1009,9 +1003,7 @@ export default function App() {
                           Step {step} of {frames.length - 1}
                         </span>
                       </span>
-                      <span>
-                        {Math.round(progress * 100)}%
-                      </span>
+                      <span>{Math.round(progress * 100)}%</span>
                     </div>
                     <input
                       aria-label="Playback position"
@@ -1131,65 +1123,21 @@ export default function App() {
             >
               <Icon name="close" />
             </button>
-            {modal === "shortcuts" ? (
-              <>
-                <span className="section-kicker">WORKSPACE CONTROLS</span>
-                <h2 id="modal-title">Keyboard shortcuts</h2>
-                {[
-                  ["Play / pause", "Space"],
-                  ["Next step", "→"],
-                  ["Previous step", "←"],
-                  ["Reset", "R"],
-                  ["Find an algorithm", "Ctrl / ⌘ K"],
-                  ["Close dialog / stop adding", "Esc"],
-                ].map(([label, key]) => (
-                  <div className="shortcut-row" key={key}>
-                    <span>{label}</span>
-                    <kbd>{key}</kbd>
-                  </div>
-                ))}
-              </>
-            ) : (
-              <>
-                <span className="section-kicker">WORKSPACE GUIDE</span>
-                <h2 id="modal-title">See the geometry unfold.</h2>
-                <p>
-                  Explore convex hull and sweep-line algorithms with a
-                  coordinate canvas and a written explanation for every step.
-                </p>
-                {[
-                  [
-                    "Choose your input",
-                    "Best and worst cases are algorithm-specific. Hover over each preset for its behavior, or read the note below the buttons.",
-                  ],
-                  [
-                    "Follow each decision",
-                    "The Current step panel explains each operation. The canvas legend identifies the candidate direction, the point being tested, and the hull boundary. Each algorithm has its own color theme.",
-                  ],
-                  [
-                    "Control the pace",
-                    "Play the sequence, adjust the speed, or use the arrows to move one step at a time. Python-style pseudocode highlights the current operation.",
-                  ],
-                ].map(([title, text], i) => (
-                  <div className="guide-step" key={title}>
-                    <span>0{i + 1}</span>
-                    <div>
-                      <h3>{title}</h3>
-                      <p>{text}</p>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  className="primary-button"
-                  onClick={() => setModal(null)}
-                >
-                  {screen === "library"
-                    ? "Back to algorithms"
-                    : "Back to workspace"}{" "}
-                  <Icon name="arrow" size={15} />
-                </button>
-              </>
-            )}
+            <span className="section-kicker">WORKSPACE CONTROLS</span>
+            <h2 id="modal-title">Keyboard shortcuts</h2>
+            {[
+              ["Play / pause", "Space"],
+              ["Next step", "→"],
+              ["Previous step", "←"],
+              ["Reset", "R"],
+              ["Find an algorithm", "Ctrl / ⌘ K"],
+              ["Close dialog / stop adding", "Esc"],
+            ].map(([label, key]) => (
+              <div className="shortcut-row" key={key}>
+                <span>{label}</span>
+                <kbd>{key}</kbd>
+              </div>
+            ))}
           </section>
         </div>
       )}

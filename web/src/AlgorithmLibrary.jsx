@@ -20,21 +20,23 @@ const entries = [
     name: "Jarvis March",
     family: "Convex hull",
     description:
-      "Wrap a set of points, choosing one outermost vertex at a time.",
+      "Builds the convex hull one vertex at a time by testing every point against the current edge.",
     complexity: "O(nh)",
     method: "Gift wrapping",
   },
   {
     name: "Graham Scan",
     family: "Convex hull",
-    description: "Sort by angle, then build a convex boundary with a stack.",
+    description:
+      "Sorts the points by angle around the lowest point, then builds the convex hull with a stack.",
     complexity: "O(n log n)",
     method: "Angular sweep",
   },
   {
     name: "Manhattan Skyline",
     family: "Sweep line",
-    description: "Move through a cityscape to trace its changing silhouette.",
+    description:
+      "Computes the outline and area of overlapping buildings with a sweep line and a max-heap.",
     complexity: "O(n log n)",
     method: "Event processing",
   },
@@ -234,7 +236,7 @@ function AlgorithmDrawing({ algorithm }) {
     </svg>
   );
 }
-export default function AlgorithmLibrary({ onSelect, onGuide }) {
+export default function AlgorithmLibrary({ onSelect }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All algorithms");
   const visible = entries.filter(
@@ -257,21 +259,6 @@ export default function AlgorithmLibrary({ onSelect, onGuide }) {
           <span className="identity-divider" />
           <span>COMPUTATIONAL GEOMETRY</span>
         </div>
-        <button className="library-guide" onClick={onGuide}>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            aria-hidden="true"
-          >
-            <path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15" />
-          </svg>
-          Workspace guide
-          <Arrow size={14} />
-        </button>
       </header>
       <div className="library-content">
         <section className="library-heading">
@@ -345,9 +332,6 @@ export default function AlgorithmLibrary({ onSelect, onGuide }) {
                   <span className="card-description">{entry.description}</span>
                   <span className="card-bottom">
                     <span className="card-complexity">{entry.complexity}</span>
-                    <span>
-                      Open visualization <Arrow size={13} />
-                    </span>
                   </span>
                 </span>
               </button>

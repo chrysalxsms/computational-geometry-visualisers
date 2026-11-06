@@ -159,6 +159,7 @@ export const initialBuildings = [
 const PYTHON_NAMES = {
   "Jarvis March": "Jarvis march",
   "Graham Scan": "Graham scan",
+  "Manhattan Skyline": "Manhattan skyline",
 };
 
 // A frame with every field the UI reads, showing just a message.
@@ -225,6 +226,27 @@ export async function hullFrames(points, algorithm) {
   });
 }
 
+export async function skylineFrames(points) {
+  const ids = new Map(
+    points.map((b) => [`${b.left},${b.right},${b.height}`, b.id]),
+  );
+  const idOf = (point) => ids.get(`${point[0]},${point[1]},${point[2]}`);
+
+  const steps = await getSteps(
+    PYTHON_NAMES["Manhattan Skyline"],
+    points.map((b) => [b.left, b.right, b.height]),
+  );
+
+  return steps.map((step) => {
+    const frame = messageFrames(step.title, step.text)[0];
+    frame.sweep = step.sweep;
+    frame.skyline = step.skyline;
+    frame.activeBuildings = step.active.map(idOf);
+    frame.checks = step.events;
+    return frame;
+  });
+}
+
 export const snippets = {
   "Jarvis March": [
     "start = current = leftmost(points)",
@@ -249,13 +271,16 @@ export const snippets = {
     "return close_polygon(stack)",
   ],
   "Manhattan Skyline": [
-    "events = sorted_edges(buildings)",
-    "active = MaxHeap([0])",
-    "for x, group in group_by_x(events):",
-    "    update_active(active, group)",
-    "    height = active.maximum()",
-    "    if height != previous_height:",
-    "        skyline.append((x, height))",
+    "events = sort(edges, by x; starts first, tallest first)",
+    "heap = []  # max-heap on height",
+    "for x, kind, building in events:",
+    "    if kind == START: push(heap, building)",
+    "    while heap and top(heap).right <= x:",
+    "        pop(heap)  # lazy deletion",
+    "    old_height = current_height",
+    "    current_height = top(heap).height if heap else 0",
+    "    if current_height != old_height:",
+    "        skyline += [(x, old_height), (x, current_height)]",
     "return skyline",
   ],
 };

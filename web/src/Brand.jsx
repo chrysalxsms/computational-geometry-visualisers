@@ -1,4 +1,4 @@
-export default function Brand({ onClick, label = "ALGO" }) {
+export default function Brand({ onClick, label = "ALGEOMETRY" }) {
   return (
     <button
       className="brand"

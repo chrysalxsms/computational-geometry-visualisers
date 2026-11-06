@@ -87,7 +87,144 @@ def test_against_brute_force(trials=1000):
         result = manhattan_skyline_plane_sweep(rectangles)
         assert result == expected, f"Failed for {rectangles}: {result} != {expected}"
 
+def test_steps_against_brute_force(trials=1000):
+    for _ in range(trials):
+        n = random.randint(1, 20)
+        r = []
+        for _ in range(n):
+            left = random.randint(0, 50)
+            width = random.randint(1, 20)     # > 0, so no degenerate rectangle
+            height = random.randint(1, 20)    # > 0
+            r.append((left, left + width, height))
+
+        expected = brute_force_area(r)
+        result = manhattan_skyline_steps(r)
+        assert result[-1]["area"] == expected, f"Failed for {r}: {result[-1]["area"]} != {expected}"
+
     print(f"All {trials} tests passed.")
+
+def active_buildings(heap, x):
+    """The heap's entries (-height, right, left) as rectangles (left, right, height). 
+    The function leaves out buildings that have already ended (right <= x), but are still in the heap because of lazy deletion."""
+    return [(left, right, -neg_height) for (neg_height, right, left) in heap if right > x]
+
+
+def manhattan_skyline_steps(rectangles):
+    """
+    Computes the steps of the  Manhattan skyline algorithm.
+
+    Returns:
+        list of step dicts.
+    """
+    if not rectangles:
+        return []
+
+    events = []
+    for (left, right, height) in rectangles:
+        events.append((left, 'START', height, right))
+        events.append((right, 'END', height, left))   # END also carries the building, for the step text
+
+    # same x: START before END (no dip to 0 where buildings touch), and the tallest START first,
+    # so the skyline changes at most once per x
+    events.sort(key=lambda event: (event[0], 0 if event[1] == 'START' else 1, -event[2]))
+
+    heap = []
+    steps = []
+    skyline = []
+    area = 0
+    prev_x = events[0][0]
+    current_height = 0
+    steps.append({
+        "title": "Events sorted",
+        "text": f"Sort the {len(events)} building edges by x; the sweep line visits them from left to right.",
+        "events": 0,
+        "sweep": events[0][0],
+        "skyline": list(skyline),
+        "active": [],
+        "area": area,
+    })
+
+    for i, event in enumerate(events):
+        x = event[0]
+        area = area + current_height * (x - prev_x)
+        if event[1] == 'START':
+            heapq.heappush(heap, (-event[2], event[3], event[0]))
+            steps.append({
+                    "title": "Push building onto heap",
+                    "text": f"Building ({event[0]}, {event[3]}) with height {event[2]} starts at x = {x}, so it is pushed onto the max-heap of active buildings.",
+                    "events": i + 1,
+                    "sweep": x,
+                    "skyline": list(skyline),
+                    "active": active_buildings(heap, x),
+                    "area": area,
+                })
+        while heap and heap[0][1] <= x:
+            popped = heapq.heappop(heap)
+            if popped[1] == x:
+                reason = f"it ends at x = {x}"
+            else:
+                reason = (f"it ended at x = {popped[1]}, but stayed in the heap underneath a taller building; "
+                        f"it is only removed now that it has reached the top (lazy deletion)")
+            steps.append({
+                    "title": "Pop building from heap",
+                    "text": f"Building ({popped[2]}, {popped[1]}) with height {-popped[0]} is removed from the heap: {reason}.",
+                    "events": i + 1,
+                    "sweep": x,
+                    "skyline": list(skyline),
+                    "active": active_buildings(heap, x),
+                    "area": area,
+                })
+        # the building that ends here was not popped: a taller building is above it in the heap
+        if event[1] == 'END' and (-event[2], x, event[3]) in heap:
+            steps.append({
+                    "title": "Building ends underneath",
+                    "text": f"Building ({event[3]}, {x}) with height {event[2]} ends at x = {x}, but it is not on top of the heap, "
+                            f"so the skyline does not change. It stays in the heap until it reaches the top.",
+                    "events": i + 1,
+                    "sweep": x,
+                    "skyline": list(skyline),
+                    "active": active_buildings(heap, x),
+                    "area": area,
+                })
+        old_height = current_height
+        if not heap:
+            current_height = 0
+            if old_height != current_height:
+                skyline.extend([(x, old_height), (x, current_height)])
+                steps.append({
+                    "title": "Update skyline",
+                    "text": f"The heap is empty, so no building is active: the skyline drops from {old_height} to 0 at x = {x}.",
+                    "events": i + 1,
+                    "sweep": x,
+                    "skyline": list(skyline),
+                    "active": active_buildings(heap, x),
+                    "area": area,
+                })
+        else:
+            current_height = -heap[0][0]
+            if old_height != current_height:
+                skyline.extend([(x, old_height), (x, current_height)])
+                steps.append({
+                    "title": "Update skyline",
+                    "text": f"The tallest active building is now ({heap[0][2]}, {heap[0][1]}) with height {current_height}, "
+                            f"on top of the heap, so the skyline steps from {old_height} to {current_height} at x = {x}.",
+                    "events": i + 1,
+                    "sweep": x,
+                    "skyline": list(skyline),
+                    "active": active_buildings(heap, x),
+                    "area": area,
+                })
+        prev_x = x
+    steps.append({
+        "title": "Done",
+        "text": f"All {len(events)} events are processed. The area under the skyline is {area}.",
+        "events": len(events),
+        "sweep": x,
+        "skyline": list(skyline),
+        "active": active_buildings(heap, x),
+        "area": area,
+    })
+    return steps
 
 
 # ---------------------------------------------------------------------------
@@ -122,7 +259,7 @@ def umbrella(n):
     the heap because the umbrella is on top (lazy deletion).
     """
     return [(0, 2 * n + 1, 1000)] + [(2 * i + 1, 2 * i + 2, random.randint(1, 100))
-                                     for i in range(n - 1)]
+                                    for i in range(n - 1)]
 
 
 TYPES = {
@@ -141,9 +278,11 @@ def check_types_against_brute_force(n=200):
 
 
 if __name__ == "__main__":
-    rectangles = [(0, 10, 10), (1, 4, 8), (2, 12, 5)]
-    area = manhattan_skyline_plane_sweep(rectangles)
+    r = [(0, 10, 10), (1, 4, 8), (2, 12, 5)]
+    area = manhattan_skyline_plane_sweep(r)
     print(f"The area of the Manhattan skyline is: {area}")
     test_against_brute_force(1000)
     check_types_against_brute_force()
     print("All tests passed successfully.")
+    test_steps_against_brute_force(1000)
+
