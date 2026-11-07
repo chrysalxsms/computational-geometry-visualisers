@@ -1,0 +1,267 @@
+/* Pastel surfaces stay soft; text and interactive marks use deeper tones. */
+:root {
+  --ink: #342c40;
+  --ink-secondary: #685a75;
+  --ink-muted: #70617b;
+  --accent: #77519a;
+  --accent-hover: #62417f;
+  --edge-green: #357257;
+  --test-amber: #9b642b;
+  --point-stroke: #82708f;
+  --control-border: #ac96bf;
+}
+
+.brand,
+.breadcrumbs > svg:first-child,
+.panel-heading svg,
+.preset-label,
+.geometry-note button,
+.icon-button,
+.secondary-button,
+.text-button,
+.catalog-search,
+.catalog-search input,
+.catalog-results > button {
+  color: var(--accent);
+}
+.brand-word,
+h1,
+.panel-heading h2,
+.preset-label h2,
+.step-body h3,
+.metric-card strong,
+.about-panel h2,
+.about-panel h3,
+.modal h2,
+.guide-step h3,
+.geometry-note h3,
+.step-variables strong {
+  color: var(--ink);
+}
+.algorithm,
+.nav-category,
+.tab,
+.breadcrumbs strong,
+.step-body > p,
+.about-panel > p,
+.modal > p,
+.guide-step p,
+.shortcut-row,
+.geometry-note p,
+.canvas-settings label,
+.metric-card > div > span,
+.legend > span,
+.label-toggle,
+.preset-note,
+.playback-progress > div {
+  color: var(--ink-secondary);
+}
+.workspace-label,
+.nav-label,
+.search-button,
+.search-button kbd,
+.nav-count,
+.sidebar-help,
+.sidebar-footer,
+.breadcrumbs,
+.algorithm-type,
+.canvas-coordinate,
+.step-index > span,
+.step-variables > span,
+.step-footer,
+.line-number,
+.progress-separator,
+.step-count,
+.playback-progress > div > span:last-child,
+.speed-control,
+.metric-card small,
+.metric-info,
+.workspace-hint,
+.keyboard-hint,
+.main-footer,
+.main-footer > span:first-child > span,
+.about-note,
+.empty-state {
+  color: var(--ink-muted);
+}
+.nav-count {
+  opacity: 1;
+}
+.algorithm.active,
+.nav-category.selected {
+  background: #eee5f7;
+  color: var(--accent-hover);
+  font-weight: 600;
+}
+.active .nav-dot,
+.active-dot,
+.panel-dot,
+.quiet-dot,
+.pulse-dot,
+.phase-tag > span,
+.workspace-badge > span {
+  background: var(--accent);
+}
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+.preset-button {
+  color: var(--ink-secondary);
+  border-color: var(--control-border);
+}
+.preset-button.active {
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: #eee3f7;
+  font-weight: 600;
+}
+.secondary-button,
+.search-button,
+.speed-control select {
+  border-color: var(--control-border);
+}
+.workspace-badge,
+.array-tag,
+.phase-tag,
+.code-language,
+.canvas-settings strong,
+.step-index,
+.section-kicker,
+.speed-control select,
+.shortcut-row kbd,
+.guide-step > span {
+  color: var(--accent);
+}
+.icon-button:hover:not(:disabled),
+.text-button:hover {
+  color: var(--accent-hover);
+}
+.play-button,
+.primary-button {
+  background: var(--accent);
+}
+.play-button:hover,
+.primary-button:hover {
+  background: var(--accent-hover);
+}
+.playback-progress input {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--accent) var(--progress),
+    #ded4e8 var(--progress)
+  );
+}
+.playback-progress input::-webkit-slider-thumb {
+  background: var(--accent);
+  width: 9px;
+  height: 9px;
+}
+.canvas-settings input,
+.label-toggle input {
+  accent-color: var(--accent);
+}
+.editing-button,
+.step-complete .phase-tag,
+.step-complete .step-body h3 {
+  color: var(--edge-green);
+}
+.purple {
+  color: var(--accent);
+}
+.peach {
+  color: var(--test-amber);
+}
+.mint-icon {
+  color: var(--edge-green);
+}
+.legend-input {
+  border-color: var(--point-stroke);
+}
+.legend-candidate {
+  background: var(--accent);
+}
+.legend-hull,
+.preset-dot.mint {
+  background: var(--edge-green);
+}
+.legend-test,
+.preset-dot.peach {
+  background: var(--test-amber);
+}
+.axis-label,
+.axis-name {
+  fill: var(--ink-muted);
+}
+.point-label {
+  fill: var(--ink-secondary);
+}
+.sweep-label {
+  fill: var(--accent-hover);
+}
+.code-line {
+  color: var(--ink-secondary);
+  font-size: 8.5px;
+}
+.syntax-keyword {
+  color: var(--accent);
+  font-weight: 500;
+}
+.highlight-line {
+  background: #eee4f8;
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.step-body > p {
+  font-size: 12px;
+  line-height: 1.85;
+}
+.step-body h3 {
+  font-size: 16px;
+}
+.step-variables strong {
+  font-weight: 600;
+}
+.metric-card strong {
+  font-weight: 650;
+}
+.panel-heading h2 {
+  font-weight: 600;
+}
+
+:root,
+.theme-jarvis {
+  --theme-wash: #fcfaff;
+  --theme-surface: #f8f3fd;
+  --theme-soft: #f1e8f9;
+  --theme-selected: #ece0f6;
+  --theme-border: #dfd1ea;
+  --theme-illustration: #d4bfe7;
+}
+.theme-graham {
+  --accent: #326d60;
+  --accent-hover: #26584c;
+  --control-border: #8eb6a8;
+  --theme-wash: #fbfefc;
+  --theme-surface: #f0f8f4;
+  --theme-soft: #e3f2e9;
+  --theme-selected: #dcefe3;
+  --theme-border: #cbded3;
+  --theme-illustration: #b6d8c5;
+  --point-stroke: #657e73;
+  --edge-green: #486d9b;
+}
+.theme-skyline {
+  --accent: #90512c;
+  --accent-hover: #7c4424;
+  --control-border: #c4a086;
+  --theme-wash: #fffdfb;
+  --theme-surface: #fdf5ed;
+  --theme-soft: #f9eadb;
+  --theme-selected: #f7e2ce;
+  --theme-border: #ead7c5;
+  --theme-illustration: #edc8a9;
+  --point-stroke: #987b66;
+}
