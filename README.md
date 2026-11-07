@@ -47,10 +47,6 @@ Python algorithm  ──steps──▶  python.js (Pyodide)  ──JSON──▶
 3. `web/src/geometry.js` converts each Python step into the frame format the interface draws.
 4. The React components in `web/src/` only draw frames. They contain no algorithm logic.
 
-## The pygame prototype
-
-`main.py` is the original desktop version, built with pygame. It hasn't been updated since the Python code moved into `web/public/python/`, so it no longer runs. `requirements.txt` lists only what it needed (`pygame-ce`); the web app doesn't use it.
-
 ## Roadmap
 
 - [x] Jarvis march with step-through
