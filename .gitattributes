@@ -5,3 +5,5 @@ build/**         linguist-vendored
 *.package.json         linguist-vendored
 *.vite.config.js         linguist-vendored
 *.eslint.config.js        linguist-vendored
+web/styles/**  linguist-generated
+web/src/**  linguist-vendored
