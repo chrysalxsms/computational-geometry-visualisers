@@ -1,9 +1,9 @@
-ui/**        linguist-generated
-export/**        linguist-vendored
-build/**         linguist-vendored
-*.package-lock.json         linguist-vendored
-*.package.json         linguist-vendored
-*.vite.config.js         linguist-vendored
-*.eslint.config.js        linguist-vendored
-web/styles/**  linguist-generated
-web/src/**  linguist-vendored
+# Keep GitHub's language bar about the algorithms (Python).
+# linguist-detectable=false only leaves files out of the language statistics.
+# Unlike vendored or generated, it does not label them as third-party or machine-made.
+web/src/**              linguist-detectable=false
+web/index.html          linguist-detectable=false
+web/*.config.js         linguist-detectable=false
+
+# Written by npm, not by hand: collapse it in diffs.
+web/package-lock.json   linguist-generated
