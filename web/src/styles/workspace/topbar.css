@@ -22,7 +22,7 @@ main {
   align-items: center;
   justify-content: center;
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 4px;
   background: transparent;
 }
 .icon-button:hover:not(:disabled) {
@@ -52,7 +52,7 @@ h1 {
   align-items: center;
   border: 1px solid #e4dbed;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 .secondary-button:hover {
   background: #f8f4fc;
