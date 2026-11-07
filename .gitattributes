@@ -1,6 +1,4 @@
 # Keep GitHub's language bar about the algorithms (Python).
-# linguist-detectable=false only leaves files out of the language statistics.
-# Unlike vendored or generated, it does not label them as third-party or machine-made.
 web/src/**              linguist-detectable=false
 web/index.html          linguist-detectable=false
 web/*.config.js         linguist-detectable=false
