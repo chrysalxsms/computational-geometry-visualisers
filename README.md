@@ -67,3 +67,5 @@ Python algorithm  ──steps──▶  python.js (Pyodide)  ──JSON──▶
 - [ ] Smallest enclosing disk
 - [ ] kd-trees
 - [ ] Voronoi Diagrams
+
+© 2026 Aishwarya Bringmans. All rights reserved.
