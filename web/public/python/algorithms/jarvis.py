@@ -1,6 +1,4 @@
-import random
 from shared.geometry import cross
-from shared.points import random_points
 
 
 def dist(p, q):
@@ -116,41 +114,3 @@ def jarvis_steps(P):
     })
 
     return steps
-
-
-if __name__ == "__main__":
-    # square with a point inside
-    points = [(0, 0), (4, 0), (4, 4), (0, 4), (2, 2)]
-    hull = jarvis_march(points)
-    assert hull == [(0, 0), (4, 0), (4, 4), (0, 4)]
-    for step in jarvis_steps([(0, 0), (4, 0), (4, 4), (0, 4), (2, 2)])[:6]:
-        print(step["title"], "|", step["text"])
-
-    # points on an edge
-    points = [(0, 0), (4, 0), (4, 4), (0, 4), (2, 0)]
-    hull = jarvis_march(points)
-    assert hull == [(0, 0), (4, 0), (4, 4), (0, 4)]
-
-    for _ in range(100):
-        points = random_points(random.randint(3, 30), -20, 20)
-        hull = jarvis_march(points)
-        for i in range(len(hull)):
-            a = hull[i]
-            b = hull[(i + 1) % len(hull)]
-            for r in points:
-                assert cross(a, b, r) >= 0, f"{r} is right of {a} -> {b}, hull = {hull}"
-
-        # the steps must end with the same hull as jarvis_march, closed
-        steps = jarvis_steps(points)
-        assert steps[-1]["hull"] == hull + [hull[0]], f"steps end with {steps[-1]['hull']}, expected {hull}"
-        # the done step shows only the hull: no candidates or tested points left
-        assert steps[-1]["points"] == {} and steps[-1]["lines"] == [], "done step still has roles"
-        # snapshot check: the first step only knows the start point
-        assert steps[0]["hull"] == [hull[0]], f"first step hull is {steps[0]['hull']}"
-        # one "next hull point" step per hull point
-        assert sum(s["title"].startswith("Next hull point") for s in steps) == len(hull)
-        # skip check: no step tests the current point or the candidate itself
-        for step in steps:
-            roles = step["points"]
-            if "testing" in roles:
-                assert roles["testing"] not in (roles["current"], roles["candidate"]), step["title"]

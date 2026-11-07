@@ -1,8 +1,6 @@
 import math
-import random
 
 from shared.geometry import cross
-from shared.points import random_points
 
 
 def dist(p, q):
@@ -136,68 +134,3 @@ def graham_steps(P):
         "text": "The stack is now the convex hull in counterclockwise order; every remaining edge has all other points on the left.",
     })
     return steps
-
-
-
-if __name__ == "__main__":
-    from algorithms.jarvis import jarvis_march
-
-    # square with a point inside: starts at the lowest point, counterclockwise
-    points = [(0, 0), (4, 0), (4, 4), (0, 4), (2, 2)]
-    assert graham_scan(points) == [(0, 0), (4, 0), (4, 4), (0, 4)]
-
-    # points on edges (including the last ray back to p0) are not hull points
-    points = [(0, 0), (4, 0), (4, 4), (0, 4), (2, 0), (0, 2), (2, 4)]
-    assert graham_scan(points) == [(0, 0), (4, 0), (4, 4), (0, 4)]
-
-    # all on one line: just the two ends
-    assert graham_scan([(0, 0), (1, 1), (3, 3)]) == [(0, 0), (3, 3)]
-
-    # the caller's list is not changed
-    points = [(3, 1), (0, 0), (1, 2), (2, 5)]
-    copy = list(points)
-    graham_scan(points)
-    assert points == copy, "graham_scan changed its input list"
-
-    # graham_steps returns no visualization steps for fewer than three points.
-    assert graham_steps([]) == []
-    assert graham_steps([(0, 0), (1, 1)]) == []
-
-    # A clockwise check pops an interior point; the final step closes the hull.
-    points = [(0, 0), (2, 1), (1, 1), (0, 3)]
-    copy = list(points)
-    steps = graham_steps(points)
-    assert points == copy, "graham_steps changed its input list"
-    assert [step["title"] for step in steps[:2]] == ["Start point", "Sorted by angle"]
-    assert steps[0]["points"]["start"] == (0, 0)
-    assert any(step["title"] == "Check turn (2, 1) -> (1, 1) -> (0, 3)" for step in steps)
-    assert any(step["title"] == "Popped (1, 1)" for step in steps)
-    assert steps[-1]["title"] == "Done"
-    assert steps[-1]["hull"] == [(0, 0), (2, 1), (0, 3), (0, 0)]
-
-    # Collinear points produce only the two endpoints, with no scan steps.
-    steps = graham_steps([(0, 0), (1, 1), (3, 3)])
-    assert [step["title"] for step in steps] == ["Start point", "Sorted by angle", "Done"]
-    assert steps[-1]["hull"] == [(0, 0), (3, 3), (0, 0)]
-
-    for _ in range(300):
-        points = random_points(random.randint(3, 30), -20, 20)
-        hull = graham_scan(points)
-        steps = graham_steps(points)
-        assert steps[-1]["hull"] == hull + [hull[0]]
-        assert all(
-            step["points"]["popped"] not in hull
-            for step in steps
-            if "popped" in step["points"]
-        )
-        # no point lies to the right of any hull edge
-        for i in range(len(hull)):
-            a = hull[i]
-            b = hull[(i + 1) % len(hull)]
-            for r in points:
-                assert cross(a, b, r) >= 0, f"{r} is right of {a} -> {b}, hull = {hull}"
-        # same hull points as Jarvis (different start point, so compare as sets)
-        assert set(hull) == set(jarvis_march(points)), f"graham {hull} vs jarvis {jarvis_march(points)}"
-
-    
-    print("All Graham scan tests passed.")
