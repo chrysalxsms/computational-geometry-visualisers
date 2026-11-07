@@ -303,10 +303,7 @@ export default function AlgorithmLibrary({ onSelect }) {
                 aria-label={`Open ${entry.name} visualization`}
               >
                 <span className="card-art">
-                  <span className="card-family">
-                    <span />
-                    {entry.family}
-                  </span>
+                  <span className="card-family">{entry.family}</span>
                   <AlgorithmDrawing algorithm={entry.name} />
                   <span className="card-complexity">{entry.complexity}</span>
                 </span>

@@ -5,10 +5,6 @@
   padding: 35px;
   min-height: 450px;
 }
-.section-kicker {
-  letter-spacing: 1.6px;
-  font-weight: 550;
-}
 .about-panel h2,
 .modal h2 {
   font-family: "Manrope", sans-serif;
@@ -35,7 +31,7 @@
   gap: 10px;
   align-items: center;
   color: #fff;
-  border-radius: 5px;
+  border-radius: 4px;
   font-weight: 500;
 }
 .modal-overlay {
@@ -56,7 +52,7 @@
   overflow-y: auto;
   background: #fff;
   border: 1px solid #e9dff1;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 20px 90px #3c2b5025;
 }
 .modal-close {

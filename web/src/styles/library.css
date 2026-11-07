@@ -19,14 +19,14 @@
     .step-card,
     .code-card,
     .preset-panel,
+    .metrics-grid,
     .metric-card,
     .playback-panel,
     .modal
   ) {
   border-color: var(--theme-border);
 }
-.app-shell
-  :is(.panel-heading, .canvas-settings, .step-footer, .workspace-tabs) {
+.app-shell :is(.panel-heading, .canvas-settings, .workspace-tabs) {
   border-color: var(--theme-border);
 }
 .app-shell :is(.step-card, .preset-note) {
@@ -39,8 +39,7 @@
     .phase-tag,
     .code-language,
     .canvas-settings strong,
-    .shortcut-row kbd,
-    .purple
+    .shortcut-row kbd
   ) {
   background: var(--theme-soft);
   border-color: var(--theme-border);
@@ -166,7 +165,7 @@
   align-items: center;
   gap: 9px;
   color: var(--ink-secondary);
-  border-radius: 5px;
+  border-radius: 4px;
   border: 1px solid transparent;
 }
 .library-filters > button.active {
@@ -178,7 +177,7 @@
 .library-filters > button > span {
   color: var(--accent);
   background: #fff9;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 0 4px;
   font-family: "IBM Plex Mono", monospace;
 }
@@ -192,7 +191,7 @@
   color: var(--ink-muted);
   border: 1px solid #dcd2e5;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 .library-search:focus-within {
   outline: 2px solid var(--accent);
@@ -225,18 +224,13 @@
   height: 100%;
   text-align: left;
   border: 1px solid var(--theme-border);
-  border-radius: 10px;
+  border-radius: 8px;
   background: #fff;
   overflow: hidden;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s,
-    transform 0.2s;
+  transition: border-color 0.2s;
 }
 .algorithm-card:hover {
   border-color: var(--accent);
-  box-shadow: 0 8px 25px #3e2c5110;
-  transform: translateY(-4px);
 }
 .algorithm-card:focus-visible {
   outline: 2px solid var(--accent);
@@ -256,12 +250,6 @@
   background: #ffffffa8;
   color: var(--accent-hover);
   border-radius: 4px;
-}
-.card-family > span {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--accent);
 }
 .algorithm-drawing {
   display: block;
@@ -286,10 +274,7 @@
 .card-arrow {
   display: grid;
   place-items: center;
-  background: var(--theme-soft);
-  border: 1px solid var(--theme-border);
   color: var(--accent);
-  border-radius: 50%;
   flex-shrink: 0;
 }
 .card-description {
@@ -487,5 +472,8 @@
   }
   .back-to-library {
     font-size: 9px;
+  }
+  .topbar-right {
+    display: none;
   }
 }

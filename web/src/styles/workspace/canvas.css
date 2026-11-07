@@ -28,11 +28,6 @@
   align-items: center;
   gap: 8px;
 }
-.panel-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-}
 .array-tag {
   background: #f7f2fc;
   border: 1px solid #f0e8f7;
@@ -97,12 +92,6 @@
 .sweep-label {
   font-family: "IBM Plex Mono", monospace;
 }
-.canvas-coordinate {
-  position: absolute;
-  right: 20px;
-  font-family: "IBM Plex Mono", monospace;
-  letter-spacing: 1px;
-}
 .canvas-settings {
   display: flex;
   justify-content: space-between;
@@ -120,7 +109,7 @@
 }
 .canvas-settings strong {
   background: #f3edf9;
-  border-radius: 3px;
+  border-radius: 4px;
   font-weight: 500;
 }
 .canvas-settings input {

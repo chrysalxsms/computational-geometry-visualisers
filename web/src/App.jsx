@@ -77,7 +77,7 @@ export default function App() {
   const frames = python.key === inputKey ? python.frames : LOADING_FRAMES;
   const progress = frames.length > 1 ? step / (frames.length - 1) : 0;
   const frame = frames[Math.min(step, frames.length - 1)];
-  const completed = step === frames.length - 1;
+  const completed = frames !== LOADING_FRAMES && step === frames.length - 1;
   const count = isSkyline ? buildings.length : points.length;
   const reset = () => {
     setPlaying(false);
@@ -271,10 +271,7 @@ export default function App() {
         <main className="workspace-main">
           <header className="topbar">
             <div className="workspace-navigation">
-              <Brand
-                onClick={returnToLibrary}
-                label={algorithm === "Jarvis March" ? "title" : "ALGEOMETRY"}
-              />
+              <Brand onClick={returnToLibrary} />
               <span className="identity-divider" />
               <button className="back-to-library" onClick={returnToLibrary}>
                 <span>
@@ -324,7 +321,6 @@ export default function App() {
                 <section className="preset-panel" aria-label="Input presets">
                   <div className="preset-row">
                     <div className="preset-label">
-                      <Icon name="shuffle" size={15} />
                       <h2>Input presets</h2>
                     </div>
                     <div className="preset-buttons">
@@ -370,7 +366,6 @@ export default function App() {
                   <section className="visual-card">
                     <div className="panel-heading">
                       <div>
-                        <span className="panel-dot" />
                         <h2>
                           {isSkyline ? "Sweep canvas" : "Geometry canvas"}
                         </h2>
@@ -678,11 +673,6 @@ export default function App() {
                           </>
                         )}
                       </svg>
-                      <span className="canvas-coordinate">
-                        {isSkyline
-                          ? "CARTESIAN PLANE / SKYLINE"
-                          : "CARTESIAN PLANE / CONVEX HULL"}
-                      </span>
                     </div>
                     <div className="canvas-settings">
                       <label>
@@ -738,11 +728,10 @@ export default function App() {
                     >
                       <div className="panel-heading">
                         <div>
-                          <Icon name="book" size={16} />
                           <h2>Current step</h2>
                         </div>
                         <span className="step-index">
-                          {String(step + 1).padStart(2, "0")}
+                          {step + 1}
                           <span> / {frames.length}</span>
                         </span>
                       </div>
@@ -750,10 +739,9 @@ export default function App() {
                         className="step-body"
                         aria-live={playing ? "off" : "polite"}
                       >
-                        <span className="phase-tag">
-                          <span />
-                          {frame.phase}
-                        </span>
+                        {frame.phase && (
+                          <span className="phase-tag">{frame.phase}</span>
+                        )}
                         <h3>{frame.title}</h3>
                         <p>{frame.detail}</p>
                         <div className="step-variables">
@@ -785,23 +773,13 @@ export default function App() {
                           )}
                         </div>
                       </div>
-                      <div className="step-footer">
-                        <span className={playing ? "pulse-dot" : "quiet-dot"} />
-                        {completed
-                          ? "Algorithm complete"
-                          : playing
-                            ? "Following playback"
-                            : "Step through at your own pace"}
-                        <Icon name={completed ? "check" : "arrow"} size={13} />
-                      </div>
                     </section>
                     <section className="code-card">
                       <div className="panel-heading">
                         <div>
-                          <Icon name="code" size={15} />
                           <h2>Pseudocode</h2>
                         </div>
-                        <span className="code-language">Python</span>
+                        <span className="code-language">Python-style</span>
                       </div>
                       <div className="code-lines">
                         {code.map((line, i) => (
@@ -888,7 +866,7 @@ export default function App() {
                               : "Paused"}
                         <span className="progress-separator">·</span>
                         <span className="step-count">
-                          Step {step} of {frames.length - 1}
+                          Step {step + 1} of {frames.length}
                         </span>
                       </span>
                       <span>{Math.round(progress * 100)}%</span>

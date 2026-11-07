@@ -45,10 +45,8 @@ h1,
   color: var(--ink-secondary);
 }
 .algorithm-type,
-.canvas-coordinate,
 .step-index > span,
 .step-variables > span,
-.step-footer,
 .line-number,
 .progress-separator,
 .step-count,
@@ -58,12 +56,6 @@ h1,
 .metric-info,
 .about-note {
   color: var(--ink-muted);
-}
-.panel-dot,
-.quiet-dot,
-.pulse-dot,
-.phase-tag > span {
-  background: var(--accent);
 }
 .tab.active {
   color: var(--accent);
@@ -89,7 +81,6 @@ h1,
 .code-language,
 .canvas-settings strong,
 .step-index,
-.section-kicker,
 .speed-control select,
 .shortcut-row kbd {
   color: var(--accent);
@@ -126,15 +117,6 @@ h1,
 .editing-button,
 .step-complete .phase-tag,
 .step-complete .step-body h3 {
-  color: var(--edge-green);
-}
-.purple {
-  color: var(--accent);
-}
-.peach {
-  color: var(--test-amber);
-}
-.mint-icon {
   color: var(--edge-green);
 }
 .legend-input {

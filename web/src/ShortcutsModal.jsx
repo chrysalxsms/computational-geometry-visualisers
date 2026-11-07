@@ -16,7 +16,6 @@ export default function ShortcutsModal({ onClose }) {
         >
           <Icon name="close" />
         </button>
-        <span className="section-kicker">WORKSPACE CONTROLS</span>
         <h2 id="modal-title">Keyboard shortcuts</h2>
         {[
           ["Play / pause", "Space"],

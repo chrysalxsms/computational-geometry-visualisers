@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   border: 1px solid #e5ddec;
-  border-radius: 7px;
+  border-radius: 8px;
   background: #fff;
 }
 .playback-controls {
@@ -33,7 +33,7 @@
   appearance: none;
   display: block;
   width: 100%;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
 }
 .playback-progress input::-webkit-slider-thumb {
@@ -55,27 +55,16 @@
 .metrics-grid {
   display: grid;
   grid-template-columns: 1.15fr 1fr 1fr;
+  border: 1px solid #e8e0ee;
+  background: #fff;
+  border-radius: 8px;
 }
 .metric-card {
   display: flex;
   align-items: center;
-  border: 1px solid #e8e0ee;
-  background: #fff;
-  border-radius: 7px;
 }
-.metric-icon {
-  border-radius: 8px;
-  place-items: center;
-  flex-shrink: 0;
-}
-.purple {
-  background: #f5eefc;
-}
-.peach {
-  background: #fcf2e9;
-}
-.mint-icon {
-  background: #f0f7f3;
+.metric-card + .metric-card {
+  border-left: 1px solid #e8e0ee;
 }
 .metric-card > div > span {
   display: block;

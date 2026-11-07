@@ -24,12 +24,7 @@
   align-items: center;
   background: #f3ecfb;
   border: 1px solid #ece1f5;
-  border-radius: 3px;
-}
-.phase-tag > span {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
+  border-radius: 4px;
 }
 .step-body h3 {
   font-family: "Manrope", sans-serif;
@@ -50,26 +45,8 @@
   align-items: center;
   border: 1px solid #eee5f6;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   font-family: "IBM Plex Mono", monospace;
-}
-.step-footer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border-top: 1px solid #eee6f5;
-}
-.step-footer svg {
-  margin-left: auto;
-}
-.quiet-dot,
-.pulse-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-}
-.pulse-dot {
-  animation: pulse 1.3s infinite;
 }
 .step-complete .phase-tag {
   background: #f0f7f3;
@@ -82,7 +59,7 @@
   font-family: "IBM Plex Mono", monospace;
   border: 1px solid #ede3f5;
   background: #faf5ff;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 .code-lines {
   padding: 12px 0 15px;

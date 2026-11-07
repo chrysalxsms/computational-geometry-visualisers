@@ -6,16 +6,7 @@ export default function AboutPanel({ algorithm, onBack }) {
 
   return (
     <section className="about-panel">
-      <span className="section-kicker">
-        {isSkyline ? "SWEEP LINE" : "CONVEX HULL"}
-      </span>
-      <h2>
-        {algorithm === "Jarvis March"
-          ? "Jarvis March"
-          : algorithm === "Graham Scan"
-            ? "Graham Scan"
-            : "Manhattan Skyline"}
-      </h2>
+      <h2>{algorithm}</h2>
       <p>
         {algorithm === "Jarvis March"
           ? "Jarvis March, also called gift wrapping, starts at the leftmost point and repeatedly scans every other point to find the next outermost vertex. Collinear ties are resolved by choosing the farthest point. It finishes when it returns to the starting vertex."
