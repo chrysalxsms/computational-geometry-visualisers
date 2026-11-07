@@ -18,24 +18,14 @@
 .library-identity > span:last-child {
   font-size: 11px;
 }
-.library-guide,
 .library-heading p,
 .library-filters > button,
 .library-search input {
   font-size: 14px;
 }
-.library-kicker {
-  font-size: 11px;
-}
 .library-heading h1 {
   font-size: 38px;
   margin-top: 0;
-}
-.library-count {
-  font-size: 23px;
-}
-.library-count > span {
-  font-size: 13px;
 }
 .library-toolbar {
   padding-bottom: 24px;
@@ -70,12 +60,6 @@
   font-size: 12px;
   padding: 6px 10px;
 }
-.card-number {
-  font-size: 12px;
-}
-.card-method {
-  font-size: 10px;
-}
 .card-content {
   padding: 23px;
 }
@@ -91,38 +75,9 @@
   min-height: 70px;
   line-height: 1.8;
 }
-.card-bottom {
-  gap: 12px;
-  flex-wrap: wrap;
-}
 .card-complexity {
   font-size: 12px;
   padding: 5px 8px;
-}
-.card-bottom > span:last-child {
-  font-size: 12px;
-}
-.library-note {
-  padding: 26px 0;
-  gap: 18px;
-}
-.library-note-icon {
-  width: 46px;
-  height: 46px;
-}
-.library-note h2 {
-  font-size: 15px;
-}
-.library-note p,
-.library-note button {
-  font-size: 13px;
-}
-.library-note kbd {
-  font-size: 12px;
-}
-.library-footer,
-.library-footer > span:first-child {
-  font-size: 12px;
 }
 .workspace-main .main-content {
   max-width: 1360px;
@@ -135,13 +90,8 @@
 .workspace-navigation {
   gap: 22px;
 }
-.back-to-library,
-.workspace-navigation .breadcrumbs strong {
+.back-to-library {
   font-size: 13px;
-}
-.workspace-badge {
-  font-size: 12px;
-  padding: 7px 10px;
 }
 .workspace-main h1 {
   font-size: 34px;
@@ -381,18 +331,6 @@
   height: 15px;
   font-size: 10px;
 }
-.workspace-hint,
-.keyboard-hint {
-  font-size: 12px;
-}
-.keyboard-hint {
-  display: flex;
-}
-.keyboard-hint kbd {
-  font-size: 11px;
-  padding: 1px 5px;
-}
-.main-footer,
 .notation-note {
   font-size: 12px;
 }
@@ -403,16 +341,14 @@
   text-align: right;
 }
 .about-panel > p,
-.modal > p,
-.guide-step p {
+.modal > p {
   font-size: 14px;
 }
 .about-panel h2,
 .modal h2 {
   font-size: 30px;
 }
-.about-panel h3,
-.guide-step h3 {
+.about-panel h3 {
   font-size: 17px;
 }
 .about-note,
@@ -432,9 +368,6 @@
 @media (max-width: 1180px) {
   .algorithm-cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .library-count {
-    display: none;
   }
   .workspace-main .visualization-grid {
     grid-template-columns: minmax(0, 1fr) 370px;
@@ -497,14 +430,8 @@
   .library-identity > span:last-child {
     font-size: 9px;
   }
-  .workspace-navigation .breadcrumbs {
-    display: none;
-  }
   .workspace-main .topbar {
     padding: 0 30px;
-  }
-  .keyboard-hint {
-    display: none;
   }
 }
 @media (max-width: 700px) {
@@ -519,9 +446,6 @@
   .library-identity > .identity-divider,
   .library-identity > span:last-child {
     display: none;
-  }
-  .library-guide {
-    font-size: 12px;
   }
   .library-content {
     padding: 35px 22px 0;
@@ -558,13 +482,6 @@
   }
   .card-title {
     font-size: 25px;
-  }
-  .library-note button {
-    display: none;
-  }
-  .library-footer {
-    flex-wrap: wrap;
-    font-size: 12px;
   }
   .workspace-main .main-content {
     padding: 25px 18px 0;
@@ -707,9 +624,6 @@
   .metric-icon {
     width: 40px;
     height: 40px;
-  }
-  .main-footer {
-    font-size: 11px;
   }
   .notation-note {
     text-align: left;

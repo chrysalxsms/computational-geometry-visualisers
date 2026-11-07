@@ -17,10 +17,12 @@ const LOADING_FRAMES = messageFrames(
   "Starting Python in your browser. The first time this takes a few seconds.",
 );
 
+import AboutPanel from "./AboutPanel.jsx";
 import AlgorithmLibrary from "./AlgorithmLibrary.jsx";
 import { algorithmFromHash, slugFor, themeFor } from "./catalog.js";
 import Brand from "./Brand.jsx";
 import Icon from "./Icon.jsx";
+import MetricsGrid from "./MetricsGrid.jsx";
 import ShortcutsModal from "./ShortcutsModal.jsx";
 
 const X = (x) => 45 + x * 5.7;
@@ -254,7 +256,7 @@ export default function App() {
     test = point(frame.test);
   const hull = frame.hull.map((id) => point(id)).filter(Boolean);
   const code = snippets[algorithm];
-  const uniqueHull = new Set(frame.hull).size;
+
   return (
     <div
       className={`app-shell ${
@@ -313,44 +315,10 @@ export default function App() {
               </span>
             </div>
             {tab === "About the algorithm" ? (
-              <section className="about-panel">
-                <span className="section-kicker">
-                  {isSkyline ? "SWEEP LINE" : "CONVEX HULL"}
-                </span>
-                <h2>
-                  {algorithm === "Jarvis March"
-                    ? "Jarvis March"
-                    : algorithm === "Graham Scan"
-                      ? "Graham Scan"
-                      : "Manhattan Skyline"}
-                </h2>
-                <p>
-                  {algorithm === "Jarvis March"
-                    ? "Jarvis March, also called gift wrapping, starts at the leftmost point and repeatedly scans every other point to find the next outermost vertex. Collinear ties are resolved by choosing the farthest point. It finishes when it returns to the starting vertex."
-                    : algorithm === "Graham Scan"
-                      ? "Graham Scan chooses the lowest point as a pivot, sorts the remaining points by polar angle, and processes them with a stack. A non-left turn removes the middle vertex. The result is a counterclockwise convex boundary; collinear interior points are discarded."
-                      : "The Manhattan skyline algorithm sweeps through sorted building-edge events. A max-heap holds the buildings it has passed the start of, with the tallest on top; buildings that have ended are only removed once they reach the top (lazy deletion). When the height on top of the heap changes, the skyline gets two corners: the old height and the new height at the same x. Events at the same x-coordinate are processed one by one: starts before ends, tallest start first."}
-                </p>
-                <h3>Experiment with the input</h3>
-                <p>
-                  {presetNote(algorithm, "Best case")}{" "}
-                  {presetNote(algorithm, "Worst case")}
-                </p>
-                <div className="about-note">
-                  <Icon name="info" size={16} />
-                  <span>
-                    {isSkyline
-                      ? "The pseudocode uses a max-heap with lazy removal or a balanced multiset."
-                      : "Orientation is determined by the sign of the 2D cross product."}
-                  </span>
-                </div>
-                <button
-                  className="primary-button"
-                  onClick={() => setTab("Visualization")}
-                >
-                  Back to visualization <Icon name="arrow" size={15} />
-                </button>
-              </section>
+              <AboutPanel
+                algorithm={algorithm}
+                onBack={() => setTab("Visualization")}
+              />
             ) : (
               <>
                 <section className="preset-panel" aria-label="Input presets">
@@ -955,68 +923,11 @@ export default function App() {
                     </select>
                   </div>
                 </section>
-                <div className="metrics-grid">
-                  <div className="metric-card">
-                    <div className="metric-icon purple">
-                      <Icon name="code" size={18} />
-                    </div>
-                    <div>
-                      <span>Time complexity</span>
-                      <strong>
-                        {algorithm === "Jarvis March" ? "O(nh)" : "O(n log n)"}
-                        <small>
-                          {algorithm === "Jarvis March"
-                            ? "output-sensitive"
-                            : "worst case"}
-                        </small>
-                      </strong>
-                    </div>
-                    <span
-                      className="metric-info"
-                      title={
-                        algorithm === "Jarvis March"
-                          ? "n is the input size; h is the number of hull vertices."
-                          : "The conceptual algorithm includes sorting and an efficient active-set or stack implementation."
-                      }
-                    >
-                      i
-                    </span>
-                  </div>
-                  <div className="metric-card">
-                    <div className="metric-icon peach">
-                      <Icon name={isSkyline ? "sweep" : "polygon"} size={18} />
-                    </div>
-                    <div>
-                      <span>
-                        {isSkyline ? "Active buildings" : "Hull vertices"}
-                      </span>
-                      <strong>
-                        {isSkyline ? frame.activeBuildings.length : uniqueHull}
-                        <small>
-                          {isSkyline
-                            ? `of ${count} buildings`
-                            : `of ${count} points`}
-                        </small>
-                      </strong>
-                    </div>
-                  </div>
-                  <div className="metric-card">
-                    <div className="metric-icon mint-icon">
-                      <Icon name="search" size={18} />
-                    </div>
-                    <div>
-                      <span>
-                        {isSkyline ? "Edges processed" : "Orientation tests"}
-                      </span>
-                      <strong>
-                        {frame.checks}
-                        <small>
-                          {isSkyline ? "sweep events" : "cross products"}
-                        </small>
-                      </strong>
-                    </div>
-                  </div>
-                </div>
+                <MetricsGrid
+                  algorithm={algorithm}
+                  frame={frame}
+                  count={count}
+                />
               </>
             )}
             <span className="notation-note">

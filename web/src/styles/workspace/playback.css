@@ -1,0 +1,106 @@
+.playback-panel {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5ddec;
+  border-radius: 7px;
+  background: #fff;
+}
+.playback-controls {
+  display: flex;
+  align-items: center;
+}
+.playback-controls .icon-button {
+  padding: 3px;
+}
+.play-button {
+  border-radius: 50%;
+  color: white;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 3px 7px #ad8dcc22;
+}
+.playback-progress {
+  flex: 1;
+}
+.playback-progress > div {
+  display: flex;
+  justify-content: space-between;
+}
+.progress-separator {
+  padding: 0 7px;
+}
+.playback-progress input {
+  appearance: none;
+  display: block;
+  width: 100%;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.playback-progress input::-webkit-slider-thumb {
+  appearance: none;
+  border-radius: 50%;
+}
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 1px solid #eee5f5;
+  padding-left: 21px;
+}
+.speed-control select {
+  border: 1px solid #ebe0f3;
+  border-radius: 4px;
+  background: #fbf7fe;
+}
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+}
+.metric-card {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e8e0ee;
+  background: #fff;
+  border-radius: 7px;
+}
+.metric-icon {
+  border-radius: 8px;
+  place-items: center;
+  flex-shrink: 0;
+}
+.purple {
+  background: #f5eefc;
+}
+.peach {
+  background: #fcf2e9;
+}
+.mint-icon {
+  background: #f0f7f3;
+}
+.metric-card > div > span {
+  display: block;
+}
+.metric-card strong {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-family: "Manrope", sans-serif;
+  letter-spacing: -0.7px;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+.metric-card small {
+  font-family: "DM Sans", sans-serif;
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.metric-info {
+  margin-left: auto;
+  align-self: start;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid #d5c6df;
+  font-family: Georgia, serif;
+}

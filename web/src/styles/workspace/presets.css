@@ -1,0 +1,58 @@
+.preset-panel {
+  background: #fff;
+  border: 1px solid #e7e0ee;
+  border-radius: 7px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+.preset-row {
+  display: flex;
+  align-items: center;
+}
+.preset-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.preset-label h2 {
+  font-weight: 500;
+}
+.preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+.preset-button {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  border: 1px solid #e9e1f1;
+  border-radius: 4px;
+  background: #fefcff;
+  white-space: nowrap;
+}
+.preset-button:hover {
+  background: #f8f3fc;
+  border-color: #ceb9df;
+}
+.preset-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.regenerate {
+  margin-left: auto;
+}
+.preset-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-top: 1px solid #f0eaf5;
+  background: #fdfbff;
+  min-height: 32px;
+  line-height: 1.6;
+}
+.preset-note svg {
+  flex-shrink: 0;
+  opacity: 0.8;
+}

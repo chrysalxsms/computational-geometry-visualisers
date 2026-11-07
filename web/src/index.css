@@ -1,6 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=IBM+Plex+Mono:wght@400;450;500;600&family=Manrope:wght@400;500;600;650;700;750&display=swap");
 @import "tailwindcss";
-@import "./styles/workspace.css";
+@import "./styles/workspace/base.css";
+@import "./styles/workspace/sidebar.css";
+@import "./styles/workspace/topbar.css";
+@import "./styles/workspace/presets.css";
+@import "./styles/workspace/canvas.css";
+@import "./styles/workspace/steps.css";
+@import "./styles/workspace/playback.css";
+@import "./styles/workspace/modals.css";
+@import "./styles/workspace/responsive.css";
 @import "./styles/palette.css";
 @import "./styles/library.css";
 @import "./styles/sizing.css";

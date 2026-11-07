@@ -1,0 +1,144 @@
+.visualization-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 325px;
+  gap: 18px;
+  align-items: stretch;
+}
+.visual-card,
+.step-card,
+.code-card {
+  border: 1px solid #e7e0ee;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.visual-card {
+  display: flex;
+  flex-direction: column;
+}
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ede7f3;
+  flex-shrink: 0;
+}
+.panel-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.array-tag {
+  background: #f7f2fc;
+  border: 1px solid #f0e8f7;
+  border-radius: 4px;
+  font-family: "IBM Plex Mono", monospace;
+}
+.chart-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.legend {
+  display: flex;
+  align-items: center;
+}
+.legend > span {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  white-space: nowrap;
+}
+.legend i {
+  border-radius: 50%;
+}
+.legend-input {
+  border: 1px solid #bcb0ce;
+  background: #fff;
+}
+.label-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.geometry-canvas {
+  position: relative;
+  padding: 0 13px 28px 5px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-height: 350px;
+}
+.geometry-canvas > svg {
+  width: 100%;
+  display: block;
+  user-select: none;
+}
+.geometry-canvas.editing > svg {
+  cursor: crosshair;
+}
+.axis-label {
+  font-family: "IBM Plex Mono", monospace;
+}
+.axis-name {
+  font-family: "IBM Plex Mono", monospace;
+  font-style: italic;
+}
+.point-label {
+  font-family: "IBM Plex Mono", monospace;
+}
+.sweep-label {
+  font-family: "IBM Plex Mono", monospace;
+}
+.canvas-coordinate {
+  position: absolute;
+  right: 20px;
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 1px;
+}
+.canvas-settings {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #eee7f4;
+  flex-shrink: 0;
+  background: #fefcff;
+}
+.canvas-settings label {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  white-space: nowrap;
+}
+.canvas-settings strong {
+  background: #f3edf9;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.canvas-settings input {
+  height: 3px;
+}
+.canvas-settings > div {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+}
+.text-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.settings-divider {
+  width: 1px;
+  height: 12px;
+  background: #e9e1f1;
+}

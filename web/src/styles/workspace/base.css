@@ -1,0 +1,32 @@
+@layer base {
+  body {
+    font-family: "DM Sans", sans-serif;
+    color: #403b49;
+    background: #faf9fc;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+  button {
+    cursor: pointer;
+    transition:
+      background 0.18s,
+      color 0.18s,
+      border-color 0.18s;
+  }
+  button,
+  input,
+  select {
+    outline-color: #ab8dca;
+    outline-offset: 4px;
+  }
+  button:disabled {
+    cursor: default;
+    opacity: 0.3;
+  }
+  button:focus-visible {
+    outline: 2px solid #ab8dca;
+  }
+  ::selection {
+    background: #e6dbf3;
+  }
+}

@@ -1,0 +1,83 @@
+.about-panel {
+  background: #fff;
+  border: 1px solid #e6deee;
+  border-radius: 8px;
+  padding: 35px;
+  min-height: 450px;
+}
+.section-kicker {
+  letter-spacing: 1.6px;
+  font-weight: 550;
+}
+.about-panel h2,
+.modal h2 {
+  font-family: "Manrope", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  margin: 12px 0 17px;
+}
+.about-panel > p {
+  line-height: 2;
+  max-width: 750px;
+}
+.about-panel h3 {
+  font-weight: 550;
+  margin: 23px 0 8px;
+}
+.about-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 23px 0;
+}
+.primary-button {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 500;
+}
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: #3c2b5050;
+  backdrop-filter: blur(5px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+}
+.modal {
+  position: relative;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e9dff1;
+  border-radius: 12px;
+  box-shadow: 0 20px 90px #3c2b5025;
+}
+.modal-close {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+}
+.modal > p {
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee5f5;
+}
+.shortcut-row kbd {
+  background: #f8f2fc;
+  border: 1px solid #e9dcf2;
+  border-radius: 4px;
+  padding: 3px 8px;
+}

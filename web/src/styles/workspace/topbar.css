@@ -1,0 +1,77 @@
+main {
+  margin-left: 232px;
+  flex: 1;
+  min-width: 0;
+}
+.topbar {
+  height: 68px;
+  border-bottom: 1px solid #eae5ef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 34px;
+  background: #fff;
+}
+.topbar-right {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 5px;
+  background: transparent;
+}
+.icon-button:hover:not(:disabled) {
+  background: #f4edf9;
+}
+.main-content {
+  max-width: 1470px;
+  margin: auto;
+  padding: 27px 34px 0;
+}
+.page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+h1 {
+  font-family: "Manrope", sans-serif;
+  font-size: 30px;
+  font-weight: 650;
+  letter-spacing: -1.1px;
+  line-height: 1.6;
+}
+.secondary-button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid #e4dbed;
+  background: #fff;
+  border-radius: 5px;
+}
+.secondary-button:hover {
+  background: #f8f4fc;
+  border-color: #c4afd7;
+}
+.workspace-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e6dfed;
+}
+.workspace-tabs > div {
+  display: flex;
+  gap: 26px;
+}
+.tab {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid transparent;
+  padding: 0 1px 12px;
+  margin-bottom: -1px;
+}
